@@ -24,6 +24,7 @@ RUN chown -R appuser:appuser /opt/data/
 RUN chmod g+w /opt
 RUN chown appuser:appuser -R /opt
 
+# Run as appuser
 USER appuser
 ENV USERNAME appuser
 ENV HOME /home/$USERNAME
