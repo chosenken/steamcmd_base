@@ -12,15 +12,7 @@ RUN apt-get -y install lib32gcc1 lib32z1 lib32ncurses5 lib32bz2-1.0 lib32stdc++6
 RUN groupadd -r appuser && useradd -r -m -g appuser appuser
 RUN echo "appuser ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers
 
-# Add the scripts to the path
-ENV PATH /opt/scripts/:$PATH
-
-# Create the data folder
-ENV DATA_FOLDER /opt/data/
-RUN mkdir -p $DATA_FOLDER
-
-# Change owner of data folder to appuser
-RUN chown -R appuser:appuser /opt/data/
+# Change owner of opt folder to appuser
 RUN chmod g+w /opt
 RUN chown appuser:appuser -R /opt
 
@@ -29,18 +21,17 @@ USER appuser
 ENV USERNAME appuser
 ENV HOME /home/$USERNAME
 
-# set up env
-RUN mkdir -p /opt/steam
-RUN mkdir -p /opt/server
-RUN mkdir -p /opt/data
 
 # Sent environmental variables
-ENV STEAMDIR /opt/steam
-ENV SERVERDIR /opt/server
+ENV STEAMDIR 	/opt/steam
+ENV SCRIPTSDIR 	/opt/scripts
+ENV DATADIR 	/opt/data/
 RUN mkdir -p $STEAMDIR
+RUN mkdir -p $SCRIPTSDIR
+RUN mkdir -p $DATADIR
 
 # Add the server scripts to path
-ENV PATH /opt/server/scripts/:$PATH
+ENV PATH $SCRIPTSDIR:$PATH
 
 # download steamcmd
 RUN wget -O - http://media.steampowered.com/client/steamcmd_linux.tar.gz | tar -C $STEAMDIR -xvz
